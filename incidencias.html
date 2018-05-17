@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Sistema de incidencias</title>
+    <!--Mover referencia de script de firebase al index!!!-->
+    <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+    <!------------------------------------------------------------------------------------------------------>
+
+</head>
+
+<body>
+    <center> <h1>Bienvenido al registro de incidencias</h1> </center>
+
+    <br>
+
+    <select id="select">
+
+        <option selected value="selected">Seleccione al empleado</option>
+
+        <option value="Luis">Luis</option>
+
+        <option value="Juan">Juan</option>
+
+        <option value="Alejandro">Alejandro</option>
+
+    </select>
+
+    <button onclick="View()">Incidencias</button>
+
+    <br>
+
+    <br>
+
+    <select id="incidenceSl" hidden="true">
+
+        <option value="selected" selected>Tipo de incidencia</option>
+
+        <option value="Ausencias">Ausencia</option>
+
+        <option value="tardie">Tardanza</option>
+
+        <option value="acta">Incidencia disciplinaria</option>
+
+    </select>
+    <br />
+    <br />
+    <button onclick="">Visualizar</button>
+
+    <button onclick="Incidence()">Registrar</button>
+    <script type="text/javascript">
+        //Variables globales
+        var empleado = document.getElementById("select");
+        var vis = document.getElementById("incidenceSl");
+        var incidences = {
+            n_ausencia: 0,
+            n_tardie: 0,
+            n_acta: 0
+        };
+        var name_emp;
+        function View() {
+
+            if (empleado.value == "selected") {
+
+                Checked();
+
+            }
+
+            else {
+
+                document.getElementById("incidenceSl").hidden = false;
+
+            }
+
+        }
+        //Revisa que el formulario esté completo y esconde los elementos necesarios
+        function Checked() {
+
+            alert("Por favor seleccione una opción");
+
+
+
+            vis.hidden = true;
+
+            vis.value = "selected";
+
+            empleado.value = "selected";
+
+        }
+        //Registra las incidencias del empleado seleccionado
+        function Incidence() {
+            if (empleado.value == "selected" || document.getElementById("incidenceSl").value == "selected") {
+                alert("Por favor complete los datos del formulario para registrar una incidencia");
+            }
+            else {
+                SetupDB();
+                var reference = firebase.database().ref();
+                //Retrieve pre-defined incidence and employee
+                reference.child("Empleados").child(empleado.value).on("value", got, err);
+
+                //Retrieve total incidences until now
+                //Set the incidence value to the previous one += 1
+                reference.child("Empleados").child(empleado.value).child(vis.value).set(1);
+                alert("Información guardada de manera exitosa! // Nombre del empleado: " + empleado.value + " // Agregada una incidencia por: " + vis.value);
+                setTimeout(
+                    function Reload() {
+                        location.reload();
+                    }, 2000
+                );
+            }
+        }
+
+        function got(data) {
+            incidences.n_ausencia = data.val().Ausencias;
+            console.log(incidences.n_ausencia);
+            console.log(data.val());
+        }
+
+        function err(error) {
+            console.log(error);
+        }
+
+        function SetupDB() {
+            var config = {
+                apiKey: "AIzaSyAsNA14-P2p6pkRqWhdGAtrn1Aqp5U3V88",
+                authDomain: "administracion-36586.firebaseapp.com",
+                databaseURL: "https://administracion-36586.firebaseio.com",
+                projectId: "administracion-36586",
+                storageBucket: "administracion-36586.appspot.com",
+                messagingSenderId: "488804713414"
+            };
+            firebase.initializeApp(config);
+            console.log(config);
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>
