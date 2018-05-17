@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 
@@ -98,23 +98,51 @@
                 SetupDB();
                 var reference = firebase.database().ref();
                 //Retrieve pre-defined incidence and employee
-                reference.child("Empleados").child(empleado.value).on("value", got, err);
-
+                setTimeout(
+                    function getData() {
+                        reference.child("Empleados").child(empleado.value).on("value", got, err);
+                        console.log("Cargando...");
+                    }, 3000
+                );
+                
                 //Retrieve total incidences until now
-                //Set the incidence value to the previous one += 1
-                reference.child("Empleados").child(empleado.value).child(vis.value).set(1);
-                alert("Información guardada de manera exitosa! // Nombre del empleado: " + empleado.value + " // Agregada una incidencia por: " + vis.value);
+                setTimeout(
+                    function Aux() {
+                        console.log(incidences.n_ausencia);
+                        switch (vis.value) {
+                            case "Ausencias":
+                                //Set the incidence value to the previous one += 1
+                                var auxAus = incidences.n_ausencia.valueOf() + 1;
+                                reference.child("Empleados").child(empleado.value).child(vis.value).set(auxAus);
+                                console.log(incindences);
+                                break;
+
+                            case "acta":
+                                var auxActa = incidences.n_acta.valueOf() + 1;
+                                reference.child("Empleados").child(empleado.value).child(vis.value).set(auxActa);
+                                break;
+
+                            case "tardie":
+                                var auxTard = incidences.n_tardie.valueOf() + 1;
+                                reference.child("Empleados").child(empleado.value).child(vis.value).set(auxTard);
+                                break;
+                        }
+                    },4000
+                );
+                
                 setTimeout(
                     function Reload() {
+                        alert("Completado!");
                         location.reload();
-                    }, 2000
+                    }, 6000
                 );
             }
         }
 
         function got(data) {
             incidences.n_ausencia = data.val().Ausencias;
-            console.log(incidences.n_ausencia);
+            incidences.n_acta = data.val().acta;
+            incidences.n_tardie = data.val().tardie;
             console.log(data.val());
         }
 
