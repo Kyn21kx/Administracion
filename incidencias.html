@@ -15,16 +15,17 @@
     <center> <h1>Bienvenido al registro de incidencias</h1> </center>
 
     <br>
-
     <select id="select">
 
         <option selected value="selected">Seleccione al empleado</option>
-
+        <!--Replace for only database employees-->
         <option value="Luis">Luis</option>
 
         <option value="Juan">Juan</option>
 
         <option value="Alejandro">Alejandro</option>
+
+        
 
     </select>
 
@@ -33,7 +34,6 @@
     <br>
 
     <br>
-
     <select id="incidenceSl" hidden="true">
 
         <option value="selected" selected>Tipo de incidencia</option>
@@ -47,9 +47,14 @@
     </select>
     <br />
     <br />
-    <button onclick="">Visualizar</button>
+    <button onclick="Show()">Visualizar</button>
 
     <button onclick="Incidence()">Registrar</button>
+    <br />
+    <br />
+    <br />
+    <input type="text" id="txtval" />
+    <button onclick="Add()">Agregar un empleado</button>
     <script type="text/javascript">
         //Variables globales
         var empleado = document.getElementById("select");
@@ -163,10 +168,42 @@
             console.log(config);
         }
 
+        //Add Employees to the html code
+        function Add() {
+            var slct = document.getElementById("select"),
+                txt = document.getElementById("txtval").value,
+                newOption = document.createElement("Option");
+            optionVal = document.createTextNode(txt);
+            newOption.setAttribute("value", txt);
+            newOption.appendChild(optionVal);
+            slct.insertBefore(newOption, slct.lastChild);
+            SetupDB();
+            var ref = firebase.database().ref();
+            var dataSt = {
+                Ausencias: 0,
+                acta: 0,
+                tardie: 0
+            };
+            ref.child("Empleados").child(txt).set(dataSt);
+            setTimeout(function Write() {
+
+            }, 5000);
+        }
+        /*var arr = {
+
+        };
+        function got2(data) {
+            arr = data.val();  
+        }*/
+        //Loads the list
+       
+        //Show Incidences
+
+        function Show () {
+            
+        }
+
     </script>
-
-
-
 </body>
 
 </html>
