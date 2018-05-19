@@ -8,25 +8,17 @@
     <!--Mover referencia de script de firebase al index!!!-->
     <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
     <!------------------------------------------------------------------------------------------------------>
-
+    <!--Generate a unique employee id for each person-->
 </head>
 
-<body>
+<body onload="Load()">
     <center> <h1>Bienvenido al registro de incidencias</h1> </center>
 
     <br>
     <select id="select">
 
         <option selected value="selected">Seleccione al empleado</option>
-        <!--Replace for only database employees-->
-        <option value="Luis">Luis</option>
-
-        <option value="Juan">Juan</option>
-
-        <option value="Alejandro">Alejandro</option>
-
         
-
     </select>
 
     <button onclick="View()">Incidencias</button>
@@ -55,6 +47,21 @@
     <br />
     <input type="text" id="txtval" />
     <button onclick="Add()">Agregar un empleado</button>
+    <br />
+    <br />
+    <br />
+    <br />
+    <center><table>
+                <tr id="conj">
+                    
+                </tr>
+        <tr id="datos">
+            
+        </tr>
+        <tr id="datos2">
+        </tr>
+    </table>
+    </center>
     <script type="text/javascript">
         //Variables globales
         var empleado = document.getElementById("select");
@@ -64,6 +71,24 @@
             n_tardie: 0,
             n_acta: 0
         };
+        function Load() {
+            SetupDB();
+            //Create text node
+            var r = firebase.database().ref();
+            r.child("Empleados").on("child_added", function (data) {
+                var aux1 = data.val();
+                var slct = document.getElementById("select"),
+                    //Get txt from database
+                    txt = aux1.nombre,
+                    newOption = document.createElement("Option");
+                optionVal = document.createTextNode(txt);
+                newOption.setAttribute("value", txt);
+                newOption.appendChild(optionVal);
+                slct.insertBefore(newOption, slct.lastChild);
+            });
+            
+            //Append it*/
+        }
         var name_emp;
         function View() {
 
@@ -100,14 +125,14 @@
                 alert("Por favor complete los datos del formulario para registrar una incidencia");
             }
             else {
-                SetupDB();
+                //SetupDB();
                 var reference = firebase.database().ref();
                 //Retrieve pre-defined incidence and employee
                 setTimeout(
                     function getData() {
                         reference.child("Empleados").child(empleado.value).on("value", got, err);
-                        console.log("Cargando...");
-                    }, 3000
+                        document.createElement("h1","Cargando...")
+                    }, 500
                 );
                 
                 //Retrieve total incidences until now
@@ -132,14 +157,14 @@
                                 reference.child("Empleados").child(empleado.value).child(vis.value).set(auxTard);
                                 break;
                         }
-                    },4000
+                    },700
                 );
                 
                 setTimeout(
                     function Reload() {
                         alert("Completado!");
                         location.reload();
-                    }, 6000
+                    }, 800
                 );
             }
         }
@@ -170,24 +195,30 @@
 
         //Add Employees to the html code
         function Add() {
-            var slct = document.getElementById("select"),
-                txt = document.getElementById("txtval").value,
-                newOption = document.createElement("Option");
-            optionVal = document.createTextNode(txt);
-            newOption.setAttribute("value", txt);
-            newOption.appendChild(optionVal);
-            slct.insertBefore(newOption, slct.lastChild);
-            SetupDB();
-            var ref = firebase.database().ref();
-            var dataSt = {
-                Ausencias: 0,
-                acta: 0,
-                tardie: 0
-            };
-            ref.child("Empleados").child(txt).set(dataSt);
-            setTimeout(function Write() {
-
-            }, 5000);
+            if (document.getElementById("txtval").value != "") {
+                var slct = document.getElementById("select"),
+                    txt = document.getElementById("txtval").value,
+                    newOption = document.createElement("Option");
+                optionVal = document.createTextNode(txt);
+                newOption.setAttribute("value", txt);
+                newOption.appendChild(optionVal);
+                slct.insertBefore(newOption, slct.lastChild);
+                //SetupDB();
+                var ref = firebase.database().ref();
+                var dataSt = {
+                    Ausencias: 0,
+                    acta: 0,
+                    tardie: 0,
+                    nombre: txt
+                };
+                ref.child("Empleados").child(txt).set(dataSt);
+                setTimeout(function Write() {
+                    location.reload();
+                }, 1200);
+            }
+            else {
+                alert("Por favor entre algún valor");
+            }
         }
         /*var arr = {
 
@@ -196,11 +227,55 @@
             arr = data.val();  
         }*/
         //Loads the list
-       
+        var auxiliar;
         //Show Incidences
-
-        function Show () {
+        var count = 1;
+        
+        function Show() {
             
+            if (count <= 1) {
+                if (document.getElementById("select").value != "selected" && vis.value != "selected") {
+                    count += 1;
+                    var rf = firebase.database().ref();
+                    rf.child("Empleados").child(empleado.value).on("value", function (dt) {
+
+                        auxiliar = dt.val();
+                        console.log(auxiliar);
+                    });
+                    setTimeout(function Something() {
+                        var table = document.getElementById("conj");
+                        var datosTabla = document.getElementById("datos");
+                        var row = document.createElement("td");
+                        var row2 = document.createElement("td");
+                        var row3 = document.createElement("td");
+                        var row4 = document.createElement("td");
+                        var d2 = document.createElement("th");
+                        var d3 = document.createElement("th");
+                        var d4 = document.createElement("th");
+                        var d5 = document.createElement("th");
+                        row.innerHTML = document.getElementById("select").value;
+                        row2.innerHTML = auxiliar.Ausencias;
+                        row3.innerHTML = auxiliar.tardie;
+                        row4.innerHTML = auxiliar.acta;
+                        d2.innerHTML = "Nombre"; d3.innerHTML = "Ausencias";
+                        d4.innerHTML = "Tardanzas"; d5.innerHTML = "Actas";
+                        table.appendChild(d2);
+                        table.appendChild(d3);
+                        table.appendChild(d4);
+                        table.appendChild(d5);
+                        datosTabla.appendChild(row);
+                        datosTabla.appendChild(row2);
+                        datosTabla.appendChild(row3);
+                        datosTabla.appendChild(row4);
+                    }, 500);
+                }
+                else {
+                    alert("Por favor seleccione un empleado y al menos un tipo de incidencia");
+                }
+            }
+            else {
+                location.reload();
+            }
         }
 
     </script>
