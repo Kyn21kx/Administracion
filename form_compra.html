@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+
+<form class='compra__form'>
+            <div class='input-container'>
+            <input type='text' id='campo1' placeholder='Nombre' required autofocus class='input-48'><br>
+            <input type='text' id='campo2' placeholder='Apellido' required class='input-48'><br>
+            <input type='text' id='campo3' placeholder='País' required class='input-48'><br>
+           	<input type='text' id='campo4' placeholder='Ciudad' required class='input-48'><br>
+            <input type='text' id='campo5' placeholder='Dirección' required class='input-100'><br>
+          	<input type='text' id='campo6' placeholder='Teléfono' required class='input-48'><br>
+           	<select>
+            <option>MasterCard</option>
+            <option>VISA</option>
+            </select>
+           	<input type='text' id='campo7' placeholder='Número de Tarjeta' required class='input-48'><br>
+            <input type="button"  onclick="comprar()" value="Realizar Compra">
+            </div>
+        </form>
+
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+<script src="iniciarBD.js"></script>
+<script src="form_compra.js"></script>
+
+</body>
+</html>
