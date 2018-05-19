@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Registro de ventas</title>
+</head>
+<body>
+    <p>Se vendió?</p>
+    <select id="validarVenta" onchange="Change()">
+        <option selected value="default">Seleccione una opción</option>
+        <option value="Y">Sí</option>
+        <option value="N">No</option>
+    </select>
+    <br />
+    <br />
+    <p id="producto" hidden="true">Producto vendido:</p>
+    <p id="oferta" hidden="true">Oferta ofrecida:</p>
+    <select id="Productos" hidden="true">
+        <option>Producto1</option>
+        <option>Producto2</option>
+        <option>Producto3</option>
+        <option>Producto4</option>
+        <option>Producto5</option>
+    </select>
+    <br />
+    <br />
+    <button onclick="Click()">Mi producto no aparece en la lista</button>
+    <br />
+    <br />
+    <p class="Texto" hidden="true"> Escribe el código del producto aquí</p>
+    <input type="text" class="Texto" hidden="true" />
+    <script>
+        function Change() {
+            var offer = document.getElementById("oferta");
+            var producto = document.getElementById("producto");
+            var validar = document.getElementById("validarVenta");
+            if (validar.value == "Y") {
+                producto.hidden = false;
+                offer.hidden = true;
+                document.getElementById("Productos").hidden = false;
+            }
+            else if (validar.value == "N") {
+                offer.hidden = false;
+                producto.hidden = true;
+                document.getElementById("Productos").hidden = false;
+            }
+            else {
+                alert("Por favor seleccione una opción para continuar");
+                offer.hidden = true;
+                producto.hidden = true;
+                document.getElementById("Productos").hidden = true;
+            }
+        }
+        function Click() {
+            var txtV = document.getElementsByClassName("Texto");
+            txtV[0].hidden = false;
+            txtV[1].hidden = false;
+        }
+    </script>
+</body>
+</html>
