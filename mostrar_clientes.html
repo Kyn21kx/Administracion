@@ -1,0 +1,65 @@
+<html>
+<body>
+<head>
+    <title></title>
+</head>
+<table>
+
+<thead>
+  <tr id="tr">
+    <th>Cliente</th>
+    <th>Correo</th> 
+</thead>  
+<tbody id="cuerpoT"></tbody>
+</table>
+
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+<script src="iniciarBD.js"></script>
+<script>
+  var ref = firebase.database().ref("usuarios");
+  /*var user = firebase.auth().currentUser;
+  var uid;*/
+
+  /*if (user != null) {
+    var refUsuario = firebase.database().ref("carritos/"+uid);
+
+    /*fila = btn.parentNode.parentNode;
+    nodo = fila.getAttribute("id");
+    console.log(nodo);
+    firebase.database().ref("carritos/"+userid+"/"+nodo).remove();
+    firebase.database().ref("temporal/"+userid+"/"+nodo).remove();
+    fila.parentNode.removeChild(fila);
+  }*/
+
+  ref.on('child_added', function(snapshot){
+
+  var cliente = snapshot.val();
+  var claveU = snapshot.key;
+  //var fila = document.createElement('tr');
+  //fila.setAttribute('id',claveu);
+  //var idp = "'"+prod.idp+"'";
+  //var btn = document.createElement('button');
+
+  var tipo = cliente.tipo;
+
+  if (tipo == "cliente") {
+    var fila = document.createElement('tr');
+    fila.setAttribute('id',claveU);
+    fila.innerHTML = '<td>' + cliente.usuario + '</td><td>' +  cliente.correo + '</td>';
+    document.getElementById('cuerpoT').appendChild(fila);
+  }
+
+
+  //crea una fila en la tabla con los datos del carrito
+  //fila.innerHTML = '<td>' + cliente.usuario + '</td><td>' +  cliente.codigo + '</td>';
+  
+  //Lo añade a la tabla
+  //document.getElementById('tb').appendChild(fila);
+  //document.getElementById('cont_btn').innerHTML = '<br><button id="btn_compra" onclick="comprar()">Comprar</button>';
+  
+});
+
+</script>
+
+</body>
+</html>
