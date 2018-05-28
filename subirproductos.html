@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Ingresar un nuevo producto</title>
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+  </head>
+  <body>
+    <center><h1>Nuevo Producto</h1></center>
+    <input type="text" id="nombre" placeholder="Nombre"><br>
+    <input type="number" id="precio" placeholder="Precio"><br>
+    <select id="select" >
+      <option value="null">Seleccione una presentacion</option>
+      <option value="presentacion1">Presentacion1</option>
+      <option value="presentacion2">Presentacion2</option>
+    </select><br>
+    <input type="text" id="descripcion" placeholder="Pequeña descripcion del producto(contenido,uso,etc)"><br>
+    <input type="file" value="upload" id="fileButton">
+    <input type="button" onclick="comprobar()" value="Agregar"><br>
+
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+    <script src="agregarproducto.js"></script>
+    <script src="iniciarBD.js"></script>
+    <script >
+    var fileButton=document.getElementById("fileButton");
+
+    fileButton.addEventListener('change', function(e) {
+      var file=e.target.files[0];
+      var storageRef=firebase.storage().ref("imagenes/"+file.name);
+      var task=storageRef.put(file);
+    });
+ </script>
+
+  </body>
+</html>
